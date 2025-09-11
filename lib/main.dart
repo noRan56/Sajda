@@ -17,13 +17,12 @@ import 'package:timezone/timezone.dart' as tz;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  // init notifications
+
   await LocalNotificationService.init();
   LocalNotificationService.scheduleDailyAzkar();
 
   tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
 
-  // request permission
   if (await Permission.notification.isDenied) {
     await Permission.notification.request();
   }
@@ -54,7 +53,6 @@ class Sajda extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
