@@ -1,15 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sajda/core/servies/notifications_servies.dart';
+import 'package:sajda/data_layer/models/azkar_favorite.dart';
+import 'package:sajda/data_layer/models/bookmark.dart';
+import 'package:sajda/data_layer/models/tasbeeh.dart';
+import 'package:sajda/presentation_layer/view/home_page_view.dart';
 import 'package:sajda/presentation_layer/view/home_view.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
-void main() {
+import 'package:timezone/timezone.dart' as tz;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  // init notifications
+  await LocalNotificationService.init();
+  LocalNotificationService.scheduleDailyAzkar();
+
+  tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
+
+  // request permission
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
+  }
+
+  Hive.registerAdapter(BookmarkAdapter());
+  Hive.registerAdapter(TasbeehAdapter());
+  Hive.registerAdapter(AzkarFavoriteAdapter());
+
+  await Hive.openBox('surahs');
+  await Hive.openBox('ayahs');
+  await Hive.openBox('favorites');
+  await Hive.openBox('prayers');
+
+  await Hive.openBox<Bookmark>('bookmark');
+
+  await Hive.openBox<Tasbeeh>('tasbeehBox');
+
+  await Hive.openBox<AzkarFavorite>('fav_azkar');
   runApp(const Sajda());
 }
 
 class Sajda extends StatelessWidget {
   const Sajda({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -24,7 +62,7 @@ class Sajda extends StatelessWidget {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           ),
-          home: const HomeView(),
+          home: const HomeViewPage(),
         );
       },
     );
