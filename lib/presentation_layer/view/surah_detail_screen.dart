@@ -44,7 +44,7 @@ class SurahDetailScreen extends StatelessWidget {
               SingleChildScrollView(
                 padding: EdgeInsets.all(16),
                 child: RichText(
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.right,
                   textDirection: TextDirection.rtl,
                   text: TextSpan(
                     style: TextStyle(
@@ -76,24 +76,29 @@ class SurahDetailScreen extends StatelessWidget {
     );
   }
 
-  // ويدجت خاصة بشكل رقم الآية
   Widget _ayahNumberCircle(int number) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4),
-      padding: EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.teal),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Text(
-        number == 0 ? "" : "$number", // البسملة بدون رقم
-        style: TextStyle(
-          fontSize: 14.sp,
-          fontFamily: "Amiri",
-          color: Colors.teal,
-          fontWeight: FontWeight.bold,
+    return Stack(
+      children: [
+        Image.asset(
+          'assets/images/star.png',
+          height: 35.h,
+          width: 35.w,
+          color: Colors.black,
         ),
-      ),
+        Positioned(
+          top: 4.h,
+          right: 12.w,
+          child: Text(
+            number == 0 ? "**" : "$number",
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontFamily: "Amiri",
+              color: Colors.teal,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

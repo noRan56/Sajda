@@ -9,39 +9,57 @@ class WakeUpAzkar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: afterWakeUp.length,
-        itemBuilder: (context, index) {
-          final dhikr = afterWakeUp[index];
-          return Stack(
-            children: [
-              ImageBackg(),
-
-              Card(
-                color: Colors.teal,
-                child: ListTile(
-                  title: Text(
-                    dhikr.text,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Text(
-                    "التكرار: ${dhikr.repeat}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+      appBar: AppBar(
+        title: Text(
+          "اذكار الاستيقاظ",
+          style: TextStyle(
+            fontFamily: "Amiri",
+            fontSize: 22.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Stack(
+        children: [
+          ImageBackg(),
+          afterWakeUp == null || afterWakeUp.isEmpty
+              ? Center(child: Text("لا يوجد أذكار"))
+              : ListView.builder(
+                itemCount: afterWakeUp.length,
+                itemBuilder: (context, index) {
+                  final dhikr = afterWakeUp[index];
+                  return Column(
+                    children: [
+                      SizedBox(height: 40.h),
+                      Card(
+                        color: Colors.teal,
+                        child: ListTile(
+                          title: Text(
+                            dhikr.text,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "التكرار: ${dhikr.repeat}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
-            ],
-          );
-        },
+        ],
       ),
     );
   }

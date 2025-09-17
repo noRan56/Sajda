@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sajda/core/styles/custom_colors.dart';
 import 'package:sajda/presentation_layer/view/azkar_page_view.dart';
 
 class MoreningAzkarWidget extends StatelessWidget {
@@ -18,20 +19,12 @@ class MoreningAzkarWidget extends StatelessWidget {
         height: 70.h,
         width: 340.w,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.pink.shade200,
-              Colors.pink.shade300,
-              Colors.pink.shade400,
-              Colors.pink.shade500,
-              Colors.pink.shade600,
-            ],
-          ),
+          gradient: CustomColors.greenGradient,
           borderRadius: BorderRadius.circular(25.r),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(width: 10.w),
             Image.asset('assets/images/moAzkar.png', height: 70.h, width: 70.w),
             SizedBox(width: 70.w),
             Text(
@@ -39,6 +32,7 @@ class MoreningAzkarWidget extends StatelessWidget {
               textAlign: TextAlign.right,
               style: TextStyle(
                 color: Colors.white,
+                fontFamily: "Amiri",
                 fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
               ),

@@ -1,183 +1,108 @@
-🕌 Sajda — Azkar, Qur'an & Prayer Times (Flutter)
+## 📱 Sajda – Qur’an, Azkar & Prayer Times
 
-Sajda is a Flutter mobile app that brings together Quran reading, daily Azkar (morning/evening/sleep), Du‘a, prayer times (based on the user’s location or manual city input), electronic Tasbeeh (counter), local caching with Hive, bookmarking for Surahs, and local notifications for Azkar and prayer reminders.
+A complete Islamic mobile application built with Flutter, featuring Qur’an reading, Azkar (daily supplications), Du‘a, prayer times based on location or manual input, electronic Tasbeeh, notifications, and local storage with Hive.
 
-✨ Key Features
+## ✨ Features
 
-Qur’an
+📖 Qur’an: Browse Surahs, view Ayahs, and add bookmarks.
 
-List of Surahs with number, Arabic name, English name, and revelation type (Makki/Madani).
+🤲 Azkar & Du‘a: Morning, evening, and before sleep supplications.
 
-Tap a Surah → view full ayahs (with right-to-left layout and verse numbers).
+⏰ Prayer Times: Auto-detect via location or manual input using online API.
 
-Bookmark Surahs for quick access.
+📿 Tasbeeh: Electronic counter with persistent storage using Hive.
 
-Azkar & Du‘a
+🔔 Notifications: Daily Azkar reminders & prayer time alerts.
 
-Built-in collections: Morning Azkar, Evening Azkar, and Sleep Du‘a.
+💾 Offline Support: Hive local database for caching Qur’an, Azkar, bookmarks, Tasbeeh, and prayer times.
 
-Electronic Tasbeeh (counter) to help track recitations.
+🛠️ Tech Stack
 
-Save favorite Azkar.
+- Flutter (UI framework)
 
-Prayer Times
+- Hive (local storage & caching)
 
-Fetch prayer timings from an online API (e.g. Aladhan).
+- Flutter Local Notifications (Azkar & prayer time scheduling)
 
-Option: Automatic (by device location) or manual city/country input.
+- Timezone package (for accurate scheduling)
 
-Local caching of fetched prayer times (Hive) for offline use.
+- Online APIs
 
-Notifications
+- Qur’an data (e.g., AlQuran.cloud API)
 
-Local scheduled notifications for:
+- Prayer times (e.g., Aladhan API)
 
-Daily Azkar (morning/evening/sleep).
+- Geolocator/Geocoding (for location-based prayer times)
 
-Prayer time reminders (schedule automatically from API times).
+```
 
-Notifications scheduled automatically on first app run (no extra user action required).
-
-Offline support (Hive)
-
-Store Surahs, Ayahs, prayer times, favorites, bookmarks, and saved Azkar locally.
-
-App works while offline using cached data.
-
-Simple & Lightweight
-
-Minimal, focused UI for reading and worship activities.
-
-Easy to extend (change Azkar times, change notification preferences, etc.)
-
-🛠️ Built With
-
-Flutter
-
-flutter_local_notifications
-— local scheduling & notifications
-
-hive & hive_flutter
-— local persistent storage / caching
-
-timezone
-— correct scheduled times handling
-
-http
-— API calls (Aladhan or AlQuran.cloud)
-
-[geolocator / geocoding] (optional) — for automatic location -> city
-
-🚀 Quick Start
-
-1. Clone repository
-   git clone https://github.com/your-username/sajda-app.git
-   cd sajda-app
-
-2. Install dependencies
-   flutter pub get
-
-3. Android manifest (permissions)
-
-Open android/app/src/main/AndroidManifest.xml and add the needed permissions (if targeting Android 12+/13+ add POST_NOTIFICATIONS and optionally SCHEDULE_EXACT_ALARM):
-
-<!-- Notifications -->
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-<!-- Optional: exact alarms (Android 12+). Only if you specifically use exact alarms. -->
-<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
-<!-- Optional: to reschedule notifications after device reboot (if you implement boot receiver) -->
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-Note: On Android 13+, the app must request the POST_NOTIFICATIONS runtime permission. For exact alarms you might need user action in settings.
-
-4. Configure APIs (optional)
-
-Prayer times API: configure base URL / method (e.g., Aladhan).
-
-Qur’an API: e.g., https://api.alquran.cloud/v1/surah.
-
-Set any API keys or base URLs in your configuration file (or .env) as your project requires.
-
-5. Run the app
-   flutter run
-
-🗂 Project Structure (suggested)
+📂 Project Structure
 lib/
-├─ main.dart
-├─ services/
-│ ├─ api_service.dart # Quran & prayer times fetching + Hive caching
-│ ├─ notification_service.dart # local notifications scheduling & init
-│ └─ favorites_service.dart # Hive favorites / bookmarks
-├─ data_layer/
-│ └─ models/ # Surah, Ayah, PrayerTime, Dhikr, Tasbeeh, Bookmark adapters
-├─ screens/
-│ ├─ home_view.dart
-│ ├─ surah_list_screen.dart
-│ ├─ surah_detail_screen.dart
-│ ├─ favorites_screen.dart
-│ ├─ prayer_time_screen.dart
-│ └─ azkar_screen.dart
-└─ utils/
-└─ timezone_helper.dart
+│-- main.dart
+│-- core/
+│   └── services/
+│       └── api_service.dart
+│       └── notification_service.dart
+│       └── hive_service.dart
+│   └── models/
+│       └── surah.dart
+│       └── ayah.dart
+│       └── prayer_time.dart
+│       └── azkar.dart
+│       └── tasbeeh.dart
+│-- screens/
+│   └── home_screen.dart
+│   └── surah_list_screen.dart
+│   └── surah_detail_screen.dart
+│   └── azkar_screen.dart
+│   └── prayer_time_screen.dart
+│   └── tasbeeh_screen.dart
+│   └── bookmarks_screen.dart
+│-- widgets/
+│   └── custom_button.dart
+│   └── custom_card.dart
+│   └── surah_tile.dart
 
-⚙️ Notes & Implementation Tips
+```
 
-Hive
+🚀 Getting Started
+1️⃣ Prerequisites
 
-Register Hive adapters (for custom models) before opening boxes.
+- \*\*Flutter SDK
 
-Use box.put(key, value) with stable keys (e.g., surah.number) to avoid duplicates.
+- \*\*A Qur’an API (e.g., AlQuran.cloud)
 
-Clear or putAll while refreshing to avoid duplicate entries.
+- \*\*A Prayer Times API (e.g., Aladhan)
 
-Notifications
+2️⃣ Install Dependencies
 
-Initialize flutter_local_notifications in main() and request runtime notification permission.
+```
+ flutter pub get
+```
 
-Use timezone package and tz.TZDateTime when scheduling for correct time-zone handling.
+3️⃣ Run the App
 
-Prefer AndroidScheduleMode.inexact fallback for devices that block exact alarms; request exact permissions only if necessary.
+```
+flutter run
+```
 
-Reschedule notifications on app start (or implement a boot receiver to reschedule after device reboot).
+📸 Screenshots
+Qur’an Azkar Prayer Times Tasbeeh
 
-Prayer Times
+🔮 Future Improvements
 
-Store complete API response in Hive (timings + meta) but pass only timings to the model used for UI.
+📌 User customization for notification times.
 
-Provide a fallback cached result if network fails.
+🎧 Add audio recitation for Surahs & Azkar.
 
-Offline Behavior
+🕌 Advanced prayer time adjustments.
 
-Always check Hive cache before calling the network (unless forceRefresh: true).
+🍎 Full iOS support for notifications.
 
-Show appropriate UI that data is loaded from cache when offline.
+🤝 Contributing
 
-Bookmarks & Favorites
+Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to add or change.
 
-Keep favorites in a Hive box with Surah number as key (no duplicates).
+📜 License
 
-For favorite Azkar, store their id/text in a separate Hive box.
-
-Tasbeeh
-
-Tasbeeh counter state can be persisted per-session in Hive so the count survives app restarts.
-
-✅ Roadmap (future ideas)
-
-Edit/customize Azkar times and notification preferences per user.
-
-Add audio playback for Surah and Du‘a recitations.
-
-Advanced scheduling: allow reminders a few minutes before prayer times.
-
-iOS-specific adjustments and full iOS notification behavior.
-
-Add unit & widget tests, CI workflow.
-
-📄 License
-
-This project is open source. Choose a license, e.g. MIT:
-
-MIT License
+This project is licensed under the MIT License.

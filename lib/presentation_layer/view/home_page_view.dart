@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sajda/core/servies/notifications_servies.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:sajda/presentation_layer/view/azkar_list_page.dart';
 import 'package:sajda/presentation_layer/view/bookmark_page.dart';
+import 'package:sajda/presentation_layer/view/notifications_setting_page.dart';
 import 'package:sajda/presentation_layer/view/prayer_time_page.dart';
 import 'package:sajda/presentation_layer/view/surah_page.dart';
-
-import 'package:timezone/timezone.dart' as tz;
 
 class HomeViewPage extends StatelessWidget {
   const HomeViewPage({super.key});
@@ -20,8 +18,19 @@ class HomeViewPage extends StatelessWidget {
           title: const Text('Sajda', style: TextStyle(color: Colors.teal)),
           centerTitle: true,
           actions: [
-            IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+            IconButton(
+              icon: Icon(Icons.settings, color: Colors.teal),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationSettingsScreen(),
+                  ),
+                );
+              },
+            ),
           ],
+
           leading: Icon(Icons.menu, color: Colors.teal),
         ),
         body: Stack(

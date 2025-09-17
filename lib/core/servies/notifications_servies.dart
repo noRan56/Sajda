@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -15,11 +17,19 @@ class LocalNotificationService {
   }
 
   static Future init() async {
+    // Initialize timezones first - this was missing
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
+
     const AndroidInitializationSettings android = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
 
-    const DarwinInitializationSettings iOS = DarwinInitializationSettings();
+    const DarwinInitializationSettings iOS = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
     const InitializationSettings settings = InitializationSettings(
       android: android,
@@ -32,121 +42,140 @@ class LocalNotificationService {
       onDidReceiveBackgroundNotificationResponse: onTap,
     );
 
-    tz.initializeTimeZones();
-  }
+    // Create notification channel for Android
+    if (Platform.isAndroid) {
+      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'daily_channel',
+        'Daily Notifications',
+        description: 'Daily reminder notifications',
+        importance: Importance.max,
+      );
 
-  static Future showBasicNotification() async {
-    const AndroidNotificationDetails android = AndroidNotificationDetails(
-      'basic_channel',
-      'Basic Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-
-    const NotificationDetails details = NotificationDetails(android: android);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'إشعار عادي',
-      'هذا إشعار تجريبي',
-      details,
-      payload: "basic",
-    );
-  }
-
-  /// ⏰
-  static Future showScheduledNotification() async {
-    const AndroidNotificationDetails android = AndroidNotificationDetails(
-      'scheduled_channel',
-      'Scheduled Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: true,
-    );
-
-    const NotificationDetails details = NotificationDetails(android: android);
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      1, // Schedule at 8:00 AM
-      25,
-    );
-
-    if (scheduled.isBefore(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.createNotificationChannel(channel);
     }
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      1,
-      'اذكار الصباح',
-      ' لا تنس قراءة اذكار الصباح 🌅 ',
-      scheduled,
-      details,
-      androidScheduleMode: AndroidScheduleMode.exact,
-      payload: 'scheduled',
-    );
   }
 
-  static Future scheduleDailyAzkar() async {
-    showScheduledNotification();
-    showDailyAzkarNotification(
-      id: 100,
-      title: "أذكار الصباح",
-      body: "🌅 لا تنس قراءة أذكار الصباح",
-      hour: 11,
-      minute: 20,
-    );
-
-    showDailyAzkarNotification(
-      id: 101,
-      title: "أذكار المساء",
-      body: "🌇 لا تنس قراءة أذكار المساء",
-      hour: 17,
-      minute: 0,
-    );
-  }
-
-  static Future showDailyAzkarNotification({
+  static Future<void> showDailyAzkarNotification({
     required int id,
     required String title,
     required String body,
     required int hour,
     required int minute,
   }) async {
-    const AndroidNotificationDetails android = AndroidNotificationDetails(
-      'daily_channel',
-      'Daily Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
+    try {
+      await flutterLocalNotificationsPlugin.cancel(id);
 
-    const NotificationDetails details = NotificationDetails(android: android);
+      const AndroidNotificationDetails android = AndroidNotificationDetails(
+        'daily_channel',
+        'Daily Notifications',
+        channelDescription: 'Daily reminder notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
+      );
 
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
+      const DarwinNotificationDetails iOS = DarwinNotificationDetails(
+        categoryIdentifier: 'daily_category',
+        presentAlert: true,
+        presentSound: true,
+      );
 
-    if (scheduled.isBefore(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
+      const NotificationDetails details = NotificationDetails(
+        android: android,
+        iOS: iOS,
+      );
+
+      // Get current time in local timezone
+      final now = tz.TZDateTime.now(tz.local);
+      print('Current local time: $now');
+
+      // Create scheduled time in local timezone
+      tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        hour,
+        minute,
+      );
+
+      print('Original scheduled time: $scheduledDate');
+
+      // If the scheduled time is already passed, set for next day
+      if (scheduledDate.isBefore(now)) {
+        scheduledDate = scheduledDate.add(const Duration(days: 1));
+        print('Adjusted scheduled time (next day): $scheduledDate');
+      }
+
+      print('Final scheduled time: $scheduledDate');
+
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledDate,
+        details,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: 'daily_$id',
+      );
+
+      print('Notification $id scheduled successfully');
+    } catch (e) {
+      print('Error scheduling notification: $e');
+    }
+  }
+
+  static Future<void> scheduleDailyAzkar() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final morningHour = prefs.getInt('morningHour') ?? 7;
+    final morningMinute = prefs.getInt('morningMinute') ?? 0;
+
+    final eveningHour = prefs.getInt('eveningHour') ?? 18;
+    final eveningMinute = prefs.getInt('eveningMinute') ?? 0;
+
+    final nightHour = prefs.getInt('nightHour') ?? 22;
+    final nightMinute = prefs.getInt('nightMinute') ?? 0;
+
+    final notificationsEnabled = prefs.getBool('notificationsEnabled') ?? true;
+
+    if (!notificationsEnabled) {
+      await cancelAllNotifications();
+      return;
     }
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduled,
-      details,
-      androidScheduleMode: AndroidScheduleMode.exact,
-      matchDateTimeComponents: DateTimeComponents.time,
-      payload: 'daily',
+    await showDailyAzkarNotification(
+      id: 100,
+      title: "أذكار الصباح",
+      body: "🌅 لا تنس قراءة أذكار الصباح",
+      hour: morningHour,
+      minute: morningMinute,
     );
+
+    await showDailyAzkarNotification(
+      id: 101,
+      title: "أذكار المساء",
+      body: "🌇 لا تنس قراءة أذكار المساء",
+      hour: eveningHour,
+      minute: eveningMinute,
+    );
+    await showDailyAzkarNotification(
+      id: 102,
+      title: " أذكار النوم",
+      body: "😴 لا تنس قراءة أذكار النوم",
+      hour: nightHour,
+      minute: nightMinute,
+    );
+  }
+
+  static Future<void> cancelAllNotifications() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -9,23 +8,17 @@ import 'package:sajda/data_layer/models/azkar_favorite.dart';
 import 'package:sajda/data_layer/models/bookmark.dart';
 import 'package:sajda/data_layer/models/tasbeeh.dart';
 import 'package:sajda/presentation_layer/view/home_page_view.dart';
-import 'package:sajda/presentation_layer/view/home_view.dart';
-import 'package:timezone/data/latest.dart' as tz;
-
-import 'package:timezone/timezone.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
 
   await LocalNotificationService.init();
-  LocalNotificationService.scheduleDailyAzkar();
-
-  tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
 
   if (await Permission.notification.isDenied) {
     await Permission.notification.request();
   }
+  await Hive.initFlutter();
+  await LocalNotificationService.scheduleDailyAzkar();
 
   Hive.registerAdapter(BookmarkAdapter());
   Hive.registerAdapter(TasbeehAdapter());
