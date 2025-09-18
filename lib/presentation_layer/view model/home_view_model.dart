@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sajda/core/servies/hive_service.dart';
+import 'package:sajda/core/servies/location_services.dart';
+import 'package:sajda/core/servies/notifications_servies.dart';
 import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/servies/api_service.dart';
 import 'package:sajda/data_layer/models/prayer_time_model.dart';
@@ -20,29 +23,14 @@ class _HomeViewModelState extends State<HomeViewModel> {
   final TextEditingController countryController = TextEditingController(
     text: "Egypt",
   );
-
   Future<PrayerTime>? _futurePrayerTime;
-
-  void _getPrayerTimes() {
-    setState(() {
-      _futurePrayerTime = apiService.fetchPrayerTimes(
-        city: cityController.text.trim(),
-        country: countryController.text.trim(),
-      );
-    });
-  }
-
-  DateTime date = DateTime.now();
-  late String clockHour;
-  late String clockMinute;
-  late String clockSecond;
-  late String dateState;
-  String showTime = '';
+  bool _isLoadingLocation = false;
 
   @override
   void initState() {
     super.initState();
-
+    _loadUserLocation();
+    // _initializeClock();
     /// الوقت
     clockHour = date.hour.toString();
     clockMinute = date.minute.toString();
@@ -68,6 +56,106 @@ class _HomeViewModelState extends State<HomeViewModel> {
 
     /// API call
     _getPrayerTimes();
+  }
+
+  void _loadUserLocation() async {
+    // Check if we have stored location
+    final storedLocation = HiveService.getUserLocation();
+    if (storedLocation != null) {
+      setState(() {
+        cityController.text = storedLocation['city'];
+        countryController.text = storedLocation['country'];
+      });
+      _getPrayerTimes();
+      return;
+    }
+
+    // Get current location
+    setState(() {
+      _isLoadingLocation = true;
+    });
+
+    try {
+      final location = await LocationService.getCurrentLocation();
+      setState(() {
+        cityController.text = location['city']!;
+        countryController.text = location['country']!;
+        // Save location for future use
+        HiveService.saveUserLocation(location['city']!, location['country']!);
+      });
+      _getPrayerTimes();
+    } catch (e) {
+      // Fallback to default location
+      setState(() {
+        cityController.text = 'Cairo';
+        countryController.text = 'Egypt';
+      });
+      _getPrayerTimes();
+    } finally {
+      setState(() {
+        _isLoadingLocation = false;
+      });
+    }
+  }
+
+  DateTime date = DateTime.now();
+  late String clockHour;
+  late String clockMinute;
+  late String clockSecond;
+  late String dateState;
+  String showTime = '';
+
+  void _getPrayerTimes() {
+    setState(() {
+      _futurePrayerTime = apiService
+          .fetchPrayerTimes(
+            city: cityController.text.trim(),
+            country: countryController.text.trim(),
+          )
+          .then((prayerTime) {
+            LocalNotificationService.schedulePrayerNotifications({
+              'Fajr': prayerTime.fajr,
+              'Dhuhr': prayerTime.dhuhr,
+              'Asr': prayerTime.asr,
+              'Maghrib': prayerTime.maghrib,
+              'Isha': prayerTime.isha,
+            });
+            return prayerTime;
+          })
+          .catchError((error) {
+            print('Error fetching prayer times: $error');
+            // You might want to show a snackbar or dialog here
+            return PrayerTime(
+              fajr: '--:--',
+              dhuhr: '--:--',
+              asr: '--:--',
+              maghrib: '--:--',
+              isha: '--:--',
+            );
+          });
+    });
+  }
+
+  void _refreshPrayerTimes() {
+    setState(() {
+      _futurePrayerTime = apiService
+          .fetchPrayerTimes(
+            city: cityController.text.trim(),
+            country: countryController.text.trim(),
+            forceRefresh: true,
+          )
+          .then((prayerTime) {
+            // Schedule notifications after getting prayer times
+            LocalNotificationService.schedulePrayerNotifications({
+              'Fajr': prayerTime.fajr,
+              'Dhuhr': prayerTime.dhuhr,
+              'Asr': prayerTime.asr,
+              'Maghrib': prayerTime.maghrib,
+              'Isha': prayerTime.isha,
+            });
+            return prayerTime;
+          });
+    });
   }
 
   @override
@@ -101,28 +189,52 @@ class _HomeViewModelState extends State<HomeViewModel> {
               ),
             ),
             SizedBox(height: 5.h),
-            GestureDetector(
-              onTap: _getPrayerTimes,
-              child: Center(
-                child: Container(
-                  height: 40.h,
-                  width: 120.w,
-                  decoration: BoxDecoration(
-                    color: Colors.teal,
-                    borderRadius: BorderRadius.circular(25.r),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'عرض المواقيت',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  onTap: _getPrayerTimes,
+                  child: Container(
+                    height: 40.h,
+                    width: 120.w,
+                    decoration: BoxDecoration(
+                      color: Colors.teal,
+                      borderRadius: BorderRadius.circular(25.r),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'عرض المواقيت',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
+                GestureDetector(
+                  onTap: _refreshPrayerTimes,
+                  child: Container(
+                    height: 40.h,
+                    width: 120.w,
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(25.r),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'تحديث',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
 
             SizedBox(height: 5.h),
@@ -184,6 +296,8 @@ class _HomeViewModelState extends State<HomeViewModel> {
       ),
     );
   }
+
+  // ... rest of your existing code for clock and UI
 
   Widget _buildRow(String title, String time) {
     return Column(

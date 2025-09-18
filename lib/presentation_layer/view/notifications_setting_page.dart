@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sajda/core/servies/notifications_servies.dart';
+import 'package:sajda/core/styles/custom_colors.dart';
+import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
@@ -139,43 +141,51 @@ class _NotificationSettingsScreenState
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SwitchListTile(
-              activeColor: Colors.teal,
-              inactiveThumbColor: Colors.grey,
-              title: Text('تفعيل التنبيهات', style: TextStyle(fontSize: 16.sp)),
-              value: _notificationsEnabled,
-              onChanged: _toggleNotifications,
+      body: Stack(
+        children: [
+          const ImageBackg(),
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SwitchListTile(
+                  activeColor: CustomColors.green2,
+                  inactiveThumbColor: Colors.grey,
+                  title: Text(
+                    'تفعيل التنبيهات',
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
+                  value: _notificationsEnabled,
+                  onChanged: _toggleNotifications,
+                ),
+                SizedBox(height: 20.h),
+                if (_notificationsEnabled) ...[
+                  _buildTimePickerTile(
+                    context,
+                    title: '🌅تنبيه أذكار الصباح',
+                    time: _morningTime,
+                    onTap: () => _selectMorningTime(context),
+                  ),
+                  SizedBox(height: 16.h),
+                  _buildTimePickerTile(
+                    context,
+                    title: '🌙تنبيه أذكار المساء',
+                    time: _eveningTime,
+                    onTap: () => _selectEveningTime(context),
+                  ),
+                  SizedBox(height: 16.h),
+                  _buildTimePickerTile(
+                    context,
+                    title: '💤 تنبيه قبل  النوم',
+                    time: _nightTime,
+                    onTap: () => _selectSleepEveningTime(context),
+                  ),
+                ],
+              ],
             ),
-            SizedBox(height: 20.h),
-            if (_notificationsEnabled) ...[
-              _buildTimePickerTile(
-                context,
-                title: '🌅تنبيه أذكار الصباح',
-                time: _morningTime,
-                onTap: () => _selectMorningTime(context),
-              ),
-              SizedBox(height: 16.h),
-              _buildTimePickerTile(
-                context,
-                title: '🌙تنبيه أذكار المساء',
-                time: _eveningTime,
-                onTap: () => _selectEveningTime(context),
-              ),
-              SizedBox(height: 16.h),
-              _buildTimePickerTile(
-                context,
-                title: '💤 تنبيه قبل  النوم',
-                time: _nightTime,
-                onTap: () => _selectSleepEveningTime(context),
-              ),
-            ],
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

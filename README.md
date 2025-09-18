@@ -89,6 +89,10 @@ flutter run
 📸 Screenshots
 Qur’an Azkar Prayer Times Tasbeeh
 
+| HomePage                              | AzkarPage                      | FavPage                    | Profile                    |
+| ------------------------------------- | ------------------------------ | -------------------------- | -------------------------- |
+| ![HomePage](assets/screens/login.png) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Profile](assets/pro.png) |
+
 🔮 Future Improvements
 
 📌 User customization for notification times.

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sajda/core/servies/hive_service.dart';
 import 'package:sajda/core/servies/notifications_servies.dart';
 import 'package:sajda/data_layer/models/azkar_favorite.dart';
 import 'package:sajda/data_layer/models/bookmark.dart';
@@ -18,6 +18,7 @@ void main() async {
     await Permission.notification.request();
   }
   await Hive.initFlutter();
+  await HiveService.init();
   await LocalNotificationService.scheduleDailyAzkar();
 
   Hive.registerAdapter(BookmarkAdapter());

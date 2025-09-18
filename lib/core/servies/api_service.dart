@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:sajda/core/servies/hive_service.dart';
 import 'package:sajda/data_layer/models/ayah_model.dart';
 import 'package:sajda/data_layer/models/prayer_time_model.dart';
 import 'package:sajda/data_layer/models/surah.dart';
@@ -59,24 +60,65 @@ class ApiService {
     }
   }
 
+  // Future<PrayerTime> fetchPrayerTimes({
+  //   required String city,
+  //   required String country,
+  //   bool forceRefresh = false,
+  // }) async {
+  //   final prayerBox = await Hive.openBox('prayer_times');
+
+  //   final key = '$city-$country';
+
+  //   if (!forceRefresh && prayerBox.containsKey(key)) {
+  //     final storedData = prayerBox.get(key);
+  //     print("🔹 Data from Hive for $key => $storedData");
+
+  //     final json = Map<String, dynamic>.from(storedData);
+
+  //     final timings = Map<String, dynamic>.from(json['timings']);
+
+  //     return PrayerTime.fromJson(timings);
+  //   }
+
+  //   final url = Uri.parse(
+  //     'https://api.aladhan.com/v1/timingsByCity?city=$city&country=$country&method=5',
+  //   );
+
+  //   final response = await http.get(url);
+
+  //   if (response.statusCode == 200) {
+  //     final data = jsonDecode(response.body);
+
+  //     final timings = Map<String, dynamic>.from(data['data']['timings']);
+  //     print("✅ API timings => $timings");
+
+  //     await prayerBox.put(key, data['data']);
+
+  //     return PrayerTime.fromJson(timings);
+  //   } else {
+  //     throw Exception('فشل في جلب مواقيت الصلاة من API');
+  //   }
+  // }
+
   Future<PrayerTime> fetchPrayerTimes({
     required String city,
     required String country,
     bool forceRefresh = false,
   }) async {
-    final prayerBox = await Hive.openBox('prayer_times');
-
-    final key = '$city-$country';
-
-    if (!forceRefresh && prayerBox.containsKey(key)) {
-      final storedData = prayerBox.get(key);
-      print("🔹 Data from Hive for $key => $storedData");
-
-      final json = Map<String, dynamic>.from(storedData);
-
-      final timings = Map<String, dynamic>.from(json['timings']);
-
-      return PrayerTime.fromJson(timings);
+    // Check if we have cached data
+    if (!forceRefresh) {
+      final cachedData = HiveService.getPrayerTimes('$city-$country');
+      if (cachedData != null) {
+        try {
+          final timings = Map<String, dynamic>.from(
+            cachedData['timings'] ?? {},
+          );
+          return PrayerTime.fromJson(timings);
+        } catch (e) {
+          print('Error parsing cached data: $e');
+          // Continue to fetch from API if cached data is invalid
+        }
+      }
     }
 
     final url = Uri.parse(
@@ -87,15 +129,15 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      final prayerData = data['data'];
+      final timings = Map<String, dynamic>.from(prayerData['timings']);
 
-      final timings = Map<String, dynamic>.from(data['data']['timings']);
-      print("✅ API timings => $timings");
-
-      await prayerBox.put(key, data['data']);
+      // Save to Hive
+      await HiveService.savePrayerTimes('$city-$country', prayerData);
 
       return PrayerTime.fromJson(timings);
     } else {
-      throw Exception('فشل في جلب مواقيت الصلاة من API');
+      throw Exception('Failed to load prayer times');
     }
   }
 }

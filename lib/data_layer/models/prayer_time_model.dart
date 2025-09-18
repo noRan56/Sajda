@@ -15,11 +15,11 @@ class PrayerTime {
 
   factory PrayerTime.fromJson(Map<String, dynamic> json) {
     return PrayerTime(
-      fajr: json['Fajr'],
-      dhuhr: json['Dhuhr'],
-      asr: json['Asr'],
-      maghrib: json['Maghrib'],
-      isha: json['Isha'],
+      fajr: json['Fajr'] ?? '--:--',
+      dhuhr: json['Dhuhr'] ?? '--:--',
+      asr: json['Asr'] ?? '--:--',
+      maghrib: json['Maghrib'] ?? '--:--',
+      isha: json['Isha'] ?? '--:--',
     );
   }
 }
