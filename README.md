@@ -89,13 +89,11 @@ flutter run
 📸 Screenshots
 Qur’an Azkar Prayer Times Tasbeeh
 
-| HomePage                              | AzkarPage                      | FavPage                    | Profile                    |
-| ------------------------------------- | ------------------------------ | -------------------------- | -------------------------- |
-| ![HomePage](assets/screens/login.png) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Profile](assets/pro.png) |
+| HomePage                              | AzkarPage                      | FavPage                    | Notifications                    |
+| ------------------------------------- | ------------------------------ | -------------------------- | -------------------------------- |
+| ![HomePage](assets/screens/login.png) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Notifications](assets/nto.png) |
 
-🔮 Future Improvements
-
-📌 User customization for notification times.
+## 🔮 Future Improvements
 
 🎧 Add audio recitation for Surahs & Azkar.
 
@@ -103,10 +101,10 @@ Qur’an Azkar Prayer Times Tasbeeh
 
 🍎 Full iOS support for notifications.
 
-🤝 Contributing
+## 🤝 Contributing
 
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to add or change.
 
-📜 License
+## 📜 License
 
 This project is licensed under the MIT License.
