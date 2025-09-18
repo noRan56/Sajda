@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sajda/core/servies/notifications_servies.dart';
 import 'package:sajda/core/styles/custom_colors.dart';
+import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -131,14 +132,7 @@ class _NotificationSettingsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'إعدادات التنبيهات',
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-            color: Colors.teal,
-          ),
-        ),
+        title: Text('إعدادات التنبيهات', style: CustomTextStyle.titleAppBar),
         centerTitle: true,
       ),
       body: Stack(

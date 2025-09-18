@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sajda/core/styles/custom_colors.dart';
+import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:sajda/data_layer/models/tasbeeh.dart';
 import 'package:sajda/data_layer/rr/tasbeeh_repo.dart';
@@ -57,7 +59,7 @@ class _TasbeehCounterScreenState extends State<TasbeehCounterScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("مسبحة إلكترونية"),
+        title: Text("مسبحة إلكترونية", style: CustomTextStyle.titleAppBar),
         centerTitle: true,
         actions: [
           IconButton(
@@ -130,7 +132,7 @@ class _TasbeehCounterScreenState extends State<TasbeehCounterScreen> {
                       height: 200.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.teal,
+                        color: CustomColors.green3,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black26,
@@ -176,7 +178,7 @@ class _TasbeehCounterScreenState extends State<TasbeehCounterScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
+                          backgroundColor: CustomColors.green4,
                         ),
                       ),
                       SizedBox(width: 15.w),

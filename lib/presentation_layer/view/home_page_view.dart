@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sajda/core/styles/custom_colors.dart';
+import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/widgets/dash_board.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:sajda/presentation_layer/view/azkar_list_page.dart';
 import 'package:sajda/presentation_layer/view/bookmark_page.dart';
+import 'package:sajda/presentation_layer/view/duaa_list_page.dart';
 import 'package:sajda/presentation_layer/view/notifications_setting_page.dart';
 import 'package:sajda/presentation_layer/view/prayer_time_page.dart';
 import 'package:sajda/presentation_layer/view/surah_page.dart';
@@ -48,7 +50,7 @@ class HomeViewPage extends StatelessWidget {
             SizedBox(height: 10.h),
             _buildLogo(),
             SizedBox(height: 10.h),
-            _buildDuaaCard(),
+            _buildDuaaCard(context),
             SizedBox(height: 10.h),
             _buildFirstRowCards(context),
             SizedBox(height: 10.h),
@@ -65,26 +67,18 @@ class HomeViewPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDuaaCard() {
+  Widget _buildDuaaCard(BuildContext context) {
     return DashboardCard(
       width: 330.w,
       height: 100.h,
       gradientColors: CustomColors.greenGradient,
-      onTap: () {},
+      onTap: () => _navigateTo(context, DuaaListPage()),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Image.asset('assets/images/lamp.png'),
           SizedBox(width: 100.w),
-          Text(
-            'جوامع الكلم',
-            style: TextStyle(
-              fontSize: 18.sp,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Amiri",
-            ),
-          ),
+          Text('من جوامع الكلم', style: CustomTextStyle.fontHome),
         ],
       ),
     );
@@ -107,14 +101,7 @@ class HomeViewPage extends StatelessWidget {
                 width: 60.w,
               ),
               SizedBox(height: 30.h),
-              Text(
-                'قرآن كريم',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  color: Colors.white,
-                  fontFamily: "Amiri",
-                ),
-              ),
+              Text('قرآن كريم', style: CustomTextStyle.fontHome),
             ],
           ),
         ),
@@ -133,15 +120,7 @@ class HomeViewPage extends StatelessWidget {
                 width: 60.w,
               ),
               SizedBox(height: 10.h),
-              Text(
-                'مواقيت الصلاة',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  color: Colors.white,
-                  fontFamily: "Amiri",
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('مواقيت الصلاة', style: CustomTextStyle.fontHome),
             ],
           ),
         ),
@@ -169,15 +148,7 @@ class HomeViewPage extends StatelessWidget {
               SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.all(12.0.w.h),
-                child: Text(
-                  'المفضلة',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Amiri",
-                  ),
-                ),
+                child: Text('المفضلة', style: CustomTextStyle.fontHome),
               ),
             ],
           ),
@@ -202,15 +173,7 @@ class HomeViewPage extends StatelessWidget {
               ),
               SizedBox(height: 10.h),
 
-              Text(
-                'أذكارك ',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  color: Colors.white,
-                  fontFamily: "Amiri",
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('أذكارك ', style: CustomTextStyle.fontHome),
             ],
           ),
         ),

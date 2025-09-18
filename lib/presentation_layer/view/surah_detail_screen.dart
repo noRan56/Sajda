@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sajda/core/servies/api_service.dart';
+import 'package:sajda/core/styles/custom_colors.dart';
+import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:sajda/data_layer/models/ayah_model.dart';
 
@@ -17,10 +19,10 @@ class SurahDetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.yellow.shade50,
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.yellow.shade50,
         title: Text(
           surahName,
-          style: TextStyle(fontFamily: "Amiri", fontSize: 22.sp),
+          style: CustomTextStyle.titleAppBar,
           textAlign: TextAlign.right,
         ),
         centerTitle: true,

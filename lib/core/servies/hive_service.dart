@@ -12,11 +12,11 @@ class HiveService {
 
   static Future<void> savePrayerTimes(
     String key,
-    Map<String, dynamic> data,
+    Map<String, dynamic> timings,
   ) async {
     final box = Hive.box(prayerBoxName);
     await box.put(key, {
-      'data': data,
+      'timings': timings,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
   }
@@ -37,8 +37,10 @@ class HiveService {
           if (storedDate.year == now.year &&
               storedDate.month == now.month &&
               storedDate.day == now.day) {
-            final data = storedData['data'] as Map<String, dynamic>?;
-            return data;
+            final rawTimings = storedData['timings'];
+            if (rawTimings is Map) {
+              return Map<String, dynamic>.from(rawTimings);
+            }
           }
         }
       }

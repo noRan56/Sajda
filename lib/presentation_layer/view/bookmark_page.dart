@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sajda/core/servies/api_service.dart';
 import 'package:sajda/core/servies/fav_services.dart';
+import 'package:sajda/core/styles/custom_colors.dart';
+import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:sajda/data_layer/models/surah.dart';
 
@@ -41,7 +43,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             .toList();
 
     return Scaffold(
-      appBar: AppBar(title: Text("المفضلة ❤️"), centerTitle: true),
+      appBar: AppBar(
+        title: Text(" ⭐️ المفضلة ", style: CustomTextStyle.titleAppBar),
+        centerTitle: true,
+      ),
       body:
           favoriteSurahs.isEmpty
               ? Center(child: Text("لا توجد سور مفضلة بعد"))
@@ -57,7 +62,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           children: [
                             Image.asset(
                               'assets/images/numDesign.png',
-                              color: Colors.teal,
+                              color: CustomColors.green1,
                             ),
                             Positioned(
                               top: 13.h,
@@ -67,7 +72,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                 child: Text(
                                   "${surah.number}",
                                   style: TextStyle(
-                                    color: Colors.teal,
+                                    color: Colors.black,
                                     fontSize: 12.sp,
                                   ),
                                 ),

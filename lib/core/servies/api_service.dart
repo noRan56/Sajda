@@ -105,39 +105,46 @@ class ApiService {
     required String country,
     bool forceRefresh = false,
   }) async {
-    // Check if we have cached data
+    final cacheKey = '$city-$country';
+
+    // 1️⃣ حاول تستخدم الكاش
     if (!forceRefresh) {
-      final cachedData = HiveService.getPrayerTimes('$city-$country');
-      if (cachedData != null) {
-        try {
-          final timings = Map<String, dynamic>.from(
-            cachedData['timings'] ?? {},
-          );
-          return PrayerTime.fromJson(timings);
-        } catch (e) {
-          print('Error parsing cached data: $e');
-          // Continue to fetch from API if cached data is invalid
-        }
+      final cachedTimings = HiveService.getPrayerTimes(cacheKey);
+      if (cachedTimings != null) {
+        print('✅ Loaded prayer times from cache');
+        return PrayerTime.fromJson(cachedTimings);
       }
     }
 
-    final url = Uri.parse(
-      'https://api.aladhan.com/v1/timingsByCity?city=$city&country=$country&method=5',
-    );
+    // 2️⃣ لو مفيش كاش → API
+    try {
+      final url = Uri.parse(
+        'https://api.aladhan.com/v1/timingsByCity?city=$city&country=$country&method=5',
+      );
 
-    final response = await http.get(url);
+      final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final prayerData = data['data'];
-      final timings = Map<String, dynamic>.from(prayerData['timings']);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final prayerData = data['data'];
+        final timings = Map<String, dynamic>.from(prayerData['timings']);
 
-      // Save to Hive
-      await HiveService.savePrayerTimes('$city-$country', prayerData);
+        // خزّن فقط timings
+        await HiveService.savePrayerTimes(cacheKey, timings);
 
-      return PrayerTime.fromJson(timings);
-    } else {
-      throw Exception('Failed to load prayer times');
+        print('🌐 Loaded prayer times from API');
+        return PrayerTime.fromJson(timings);
+      } else {
+        throw Exception('Failed to load prayer times');
+      }
+    } catch (e) {
+      // 3️⃣ fallback على الكاش
+      final cachedTimings = HiveService.getPrayerTimes(cacheKey);
+      if (cachedTimings != null) {
+        print('📦 Using cached prayer times after API failure');
+        return PrayerTime.fromJson(cachedTimings);
+      }
+      rethrow;
     }
   }
 }

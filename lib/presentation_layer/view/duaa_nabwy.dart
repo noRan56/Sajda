@@ -1,39 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sajda/core/styles/custom_colors.dart';
-import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:sajda/presentation_layer/view%20model/azkar_morring.dart';
 
-class EveningAzkar extends StatelessWidget {
-  const EveningAzkar({super.key});
+class DuaaNabwy extends StatelessWidget {
+  const DuaaNabwy({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CustomColors.white,
-        title: Text("🌙 أذكار المساء 🌙 ", style: CustomTextStyle.titleAppBar),
+        backgroundColor: Colors.white,
+        title: Text(
+          "📚 زاد المسلم",
+          style: TextStyle(
+            fontFamily: "Amiri",
+            fontSize: 22.sp,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF007D62),
+          ),
+        ),
         centerTitle: true,
       ),
       body: Stack(
         children: [
           ImageBackg(),
           ListView.builder(
-            itemCount: eveningAdhkar.length,
+            itemCount: duaaNabwey.length,
             itemBuilder: (context, index) {
-              final dhikr = eveningAdhkar[index];
+              final dhikr = duaaNabwey[index];
               return Column(
                 children: [
-                  SizedBox(height: 10.h),
-
+                  SizedBox(height: 20.h),
                   Card(
-                    color: CustomColors.green1,
+                    color: CustomColors.green2,
+
                     child: ListTile(
                       title: Text(
                         dhikr.text,
                         textAlign: TextAlign.right,
-                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontFamily: "Amiri",
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       subtitle: Text(
                         "التكرار: ${dhikr.repeat}",
@@ -41,6 +53,8 @@ class EveningAzkar extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          fontFamily: "Amiri",
+                          fontSize: 16.sp,
                         ),
                       ),
                     ),

@@ -10,8 +10,9 @@ class AzkarPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
-          "اذكار الصباح",
+          "🌈اذكار الصباح",
           style: TextStyle(
             fontFamily: "Amiri",
             fontSize: 22.sp,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sajda/core/styles/custom_colors.dart';
+import 'package:sajda/core/styles/custom_text_style.dart';
 import 'package:sajda/core/widgets/image_backg.dart';
 import 'package:sajda/presentation_layer/view%20model/azkar_morring.dart';
 
@@ -34,17 +36,14 @@ class WakeUpAzkar extends StatelessWidget {
                     children: [
                       SizedBox(height: 40.h),
                       Card(
-                        color: Colors.teal,
+                        color: CustomColors.green4,
                         child: ListTile(
                           title: Text(
                             dhikr.text,
                             textAlign: TextAlign.right,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: CustomTextStyle.fontAzkar,
                           ),
+
                           subtitle: Text(
                             "التكرار: ${dhikr.repeat}",
                             textAlign: TextAlign.center,
