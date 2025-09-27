@@ -91,7 +91,7 @@ Qur’an Azkar Prayer Times Tasbeeh
 
 | HomePage                     | AzkarPage                      | FavPage                    | Notifications                    |
 | ---------------------------- | ------------------------------ | -------------------------- | -------------------------------- |
-| ![HomePage](assets/home.png) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Notifications](assets/nto.png) |
+| ![HomePage](assets/home.jpg) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Notifications](assets/nto.png) |
 
 | HomePage                     | AzkarPage                      | FavPage                    | Notifications                    |
 | ---------------------------- | ------------------------------ | -------------------------- | -------------------------------- |
