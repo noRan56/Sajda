@@ -8,6 +8,7 @@ import 'package:sajda/data_layer/models/azkar_favorite.dart';
 import 'package:sajda/data_layer/models/bookmark.dart';
 import 'package:sajda/data_layer/models/tasbeeh.dart';
 import 'package:sajda/presentation_layer/view/home_page_view.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

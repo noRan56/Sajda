@@ -39,7 +39,12 @@ class AzkarPageView extends StatelessWidget {
                       title: Text(
                         dhikr.text,
                         textAlign: TextAlign.right,
-                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontFamily: "Amiri",
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       subtitle: Text(
                         "التكرار: ${dhikr.repeat}",

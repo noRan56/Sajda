@@ -22,7 +22,12 @@ class TasbeehHistoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "سجل الأذكار",
-          style: TextStyle(fontSize: 22.sp, color: Colors.teal.shade600),
+          style: TextStyle(
+            fontSize: 22.sp,
+            color: Colors.teal.shade600,
+            fontFamily: "Amiri",
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -76,7 +81,11 @@ class TasbeehHistoryScreen extends StatelessWidget {
 
                             title: Text(
                               t.phrase,
-                              style: const TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontFamily: "Amiri",
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,

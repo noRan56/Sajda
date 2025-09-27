@@ -33,7 +33,7 @@ class EveningAzkar extends StatelessWidget {
                       title: Text(
                         dhikr.text,
                         textAlign: TextAlign.right,
-                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                        style: CustomTextStyle.fontAzkar,
                       ),
                       subtitle: Text(
                         "التكرار: ${dhikr.repeat}",
@@ -41,6 +41,8 @@ class EveningAzkar extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          fontSize: 14.sp,
+                          fontFamily: "Amiri",
                         ),
                       ),
                     ),

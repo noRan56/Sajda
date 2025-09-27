@@ -103,7 +103,11 @@ class _TasbeehCounterScreenState extends State<TasbeehCounterScreen> {
                           value: i,
                           child: Text(
                             tasbeehs[i].phrase,
-                            style: TextStyle(fontSize: 10.sp),
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              fontFamily: "Amiri",
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -121,6 +125,7 @@ class _TasbeehCounterScreenState extends State<TasbeehCounterScreen> {
                     style: TextStyle(
                       fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
+                      fontFamily: "Amiri",
                     ),
                   ),
                   SizedBox(height: 30.h),
@@ -147,6 +152,8 @@ class _TasbeehCounterScreenState extends State<TasbeehCounterScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Amiri",
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -162,6 +169,7 @@ class _TasbeehCounterScreenState extends State<TasbeehCounterScreen> {
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
+                      fontFamily: "Amiri",
                     ),
                   ),
 

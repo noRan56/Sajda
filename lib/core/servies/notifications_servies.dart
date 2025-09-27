@@ -22,7 +22,7 @@ class LocalNotificationService {
     tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
 
     const AndroidInitializationSettings android = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      '@mipmap/launcher_icon',
     );
 
     const DarwinInitializationSettings iOS = DarwinInitializationSettings(
@@ -57,6 +57,46 @@ class LocalNotificationService {
           >()
           ?.createNotificationChannel(channel);
     }
+    await showDailyAzkarNotification(
+      id: 103,
+      title: " يوم جديد يا حبيبي 😉",
+      body:
+          "كل صباح، أذكر نفسي، أن أتمسك بما أستطيع، ولا تنظر عيني إلى ما هو أبعد، كل صباح، أذكر نفسي، أني لا أملك نتيجة، ولا أتحكم في مصير، وأن علي احترام ضعفي ومحدوديتي وبشريتي، كل صباح أحاول من جديد، أحاول أن أجعل ذنبي أقل حدة، وأن أزيد مساحة قبولي لتلك الأخطاء التي ارتكبتها وأرتكبها، كل صباح أفتش عن الأمل، كأني لم أفتش عنه مطلقًا",
+      hour: 9,
+      minute: 30,
+    );
+    await showDailyAzkarNotification(
+      id: 104,
+      title: '🔻لن نترك غزة وحدها🔻',
+      body:
+          'اللَّهُمَّ مُنْزِلَ الكِتَابِ، ومُجْرِيَ السَّحَابِ، وهَازِمَ الأحْزَابِ، اهْزِم الصها..،..ينة وانْصُرْنَا عليهم',
+      hour: 15,
+      minute: 0,
+    );
+    await showWeeklyNotification(
+      id: 200,
+      title: "📖 تذكير أسبوعي",
+      body: "لا تنس قراءة سورة الكهف اليوم 🌿",
+      weekday: DateTime.friday, // Friday
+      hour: 9,
+      minute: 30,
+    );
+    await showWeeklyNotification(
+      id: 201,
+      title: "📖 تذكير أسبوعي",
+      body: "لا تنس الصلاة على الحبيب",
+      weekday: DateTime.friday, // Friday
+      hour: 15,
+      minute: 35,
+    );
+    await showWeeklyNotification(
+      id: 200,
+      title: "دعاء مجاب !🤲",
+      body: "نذكركم بأن الدعاء بين الظهر والعصر مستجاب يوم الأربعاء ",
+      weekday: DateTime.wednesday,
+      hour: 13,
+      minute: 20,
+    );
   }
 
   static Future<void> showDailyAzkarNotification({
@@ -92,7 +132,6 @@ class LocalNotificationService {
 
       // Get current time in local timezone
       final now = tz.TZDateTime.now(tz.local);
-      print('Current local time: $now');
 
       // Create scheduled time in local timezone
       tz.TZDateTime scheduledDate = tz.TZDateTime(
@@ -104,15 +143,13 @@ class LocalNotificationService {
         minute,
       );
 
-      print('Original scheduled time: $scheduledDate');
-
       // If the scheduled time is already passed, set for next day
       if (scheduledDate.isBefore(now)) {
         scheduledDate = scheduledDate.add(const Duration(days: 1));
-        print('Adjusted scheduled time (next day): $scheduledDate');
+        // print('Adjusted scheduled time (next day): $scheduledDate');
       }
 
-      print('Final scheduled time: $scheduledDate');
+      // print('Final scheduled time: $scheduledDate');
 
       await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
@@ -126,9 +163,9 @@ class LocalNotificationService {
         payload: 'daily_$id',
       );
 
-      print('Notification $id scheduled successfully');
+      // print('Notification $id scheduled successfully');
     } catch (e) {
-      print('Error scheduling notification: $e');
+      // print('Error scheduling notification: $e');
     }
   }
 
@@ -252,6 +289,75 @@ class LocalNotificationService {
 
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
+  }
+
+  static Future<void> showWeeklyNotification({
+    required int id,
+    required String title,
+    required String body,
+    required int weekday, // 1 = Monday, 7 = Sunday
+    required int hour,
+    required int minute,
+  }) async {
+    try {
+      await flutterLocalNotificationsPlugin.cancel(id);
+
+      const AndroidNotificationDetails android = AndroidNotificationDetails(
+        'weekly_channel',
+        'Weekly Notifications',
+        channelDescription: 'Weekly reminder notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
+      );
+
+      const DarwinNotificationDetails iOS = DarwinNotificationDetails(
+        categoryIdentifier: 'weekly_category',
+        presentAlert: true,
+        presentSound: true,
+      );
+
+      const NotificationDetails details = NotificationDetails(
+        android: android,
+        iOS: iOS,
+      );
+
+      final now = tz.TZDateTime.now(tz.local);
+
+      // First scheduled date (this week)
+      tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        hour,
+        minute,
+      );
+
+      // Adjust to the correct weekday
+      while (scheduledDate.weekday != weekday) {
+        scheduledDate = scheduledDate.add(const Duration(days: 1));
+      }
+
+      // If it's already passed for today, push to next week
+      if (scheduledDate.isBefore(now)) {
+        scheduledDate = scheduledDate.add(const Duration(days: 7));
+      }
+
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledDate,
+        details,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+        payload: 'weekly_$id',
+      );
+    } catch (e) {
+      print('Error scheduling weekly notification: $e');
+    }
   }
 
   static Future<void> cancelAllNotifications() async {

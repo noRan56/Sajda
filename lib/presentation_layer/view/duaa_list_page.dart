@@ -8,6 +8,7 @@ import 'package:sajda/core/widgets/shared_widget.dart';
 import 'package:sajda/core/widgets/sleeping_azkar.dart';
 import 'package:sajda/core/widgets/tasbeeh_widget.dart';
 import 'package:sajda/presentation_layer/view/duaa_for_dead.dart';
+import 'package:sajda/presentation_layer/view/duaa_for_gaza_page.dart';
 import 'package:sajda/presentation_layer/view/duaa_for_self.dart';
 import 'package:sajda/presentation_layer/view/duaa_nabwy.dart';
 import 'package:sajda/presentation_layer/view/duaa_qurany.dart';
@@ -87,6 +88,17 @@ class DuaaListPage extends StatelessWidget {
                         ),
                   ),
                   SizedBox(height: 20.h),
+                  CustomCardWidget(
+                    color: CustomColors.green4,
+                    imagePath: 'assets/images/ga.png',
+                    title: 'دعاء الأقصى ',
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DuaaForGaza(),
+                          ),
+                        ),
+                  ),
                 ],
               ),
             ),

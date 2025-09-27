@@ -46,7 +46,7 @@ class SurahDetailScreen extends StatelessWidget {
               SingleChildScrollView(
                 padding: EdgeInsets.all(16),
                 child: RichText(
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.justify,
                   textDirection: TextDirection.rtl,
                   text: TextSpan(
                     style: TextStyle(
@@ -55,19 +55,7 @@ class SurahDetailScreen extends StatelessWidget {
                       fontFamily: "Amiri",
                       color: Colors.black,
                     ),
-                    children: [
-                      ...ayahs.map((ayah) {
-                        return TextSpan(
-                          children: [
-                            TextSpan(text: ayah.text),
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: _ayahNumberCircle(ayah.numberInSurah),
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ],
+                    children: _buildAyahSpans(ayahs),
                   ),
                 ),
               ),
@@ -76,6 +64,32 @@ class SurahDetailScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  List<TextSpan> _buildAyahSpans(List<Ayah> ayahs) {
+    List<TextSpan> spans = [];
+
+    for (int i = 0; i < ayahs.length; i++) {
+      final ayah = ayahs[i];
+
+      // Add the ayah text
+      spans.add(TextSpan(text: ayah.text));
+
+      spans.add(
+        TextSpan(
+          children: [
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: _ayahNumberCircle(ayah.numberInSurah),
+            ),
+
+            if (i < ayahs.length - 1) TextSpan(text: " "),
+          ],
+        ),
+      );
+    }
+
+    return spans;
   }
 
   Widget _ayahNumberCircle(int number) {

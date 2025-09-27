@@ -93,6 +93,10 @@ Qur’an Azkar Prayer Times Tasbeeh
 | ---------------------------- | ------------------------------ | -------------------------- | -------------------------------- |
 | ![HomePage](assets/home.png) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Notifications](assets/nto.png) |
 
+| HomePage                     | AzkarPage                      | FavPage                    | Notifications                    |
+| ---------------------------- | ------------------------------ | -------------------------- | -------------------------------- |
+| ![HomePage](assets/home.png) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Notifications](assets/nto.png) |
+
 ## 🔮 Future Improvements
 
 🎧 Add audio recitation for Surahs & Azkar.

@@ -30,7 +30,7 @@ class HomeViewPage extends StatelessWidget {
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(Icons.settings, color: Colors.teal),
+          icon: const Icon(Icons.notifications_active, color: Colors.teal),
           onPressed:
               () => _navigateTo(context, const NotificationSettingsScreen()),
         ),
@@ -90,7 +90,7 @@ class HomeViewPage extends StatelessWidget {
         DashboardCard(
           width: 150.w,
           height: 150.h,
-          gradientColors: CustomColors.lightGreenGradient,
+          gradientColors: CustomColors.greenGradient,
           onTap: () => _navigateTo(context, SurahListScreen()),
           child: Column(
             children: [
@@ -109,7 +109,7 @@ class HomeViewPage extends StatelessWidget {
         DashboardCard(
           width: 160.w,
           height: 120.h,
-          gradientColors: CustomColors.lightGreenGradient,
+          gradientColors: CustomColors.greenGradient,
           onTap: () => _navigateTo(context, PrayerTimeScreen()),
           child: Column(
             children: [
@@ -157,7 +157,7 @@ class HomeViewPage extends StatelessWidget {
         DashboardCard(
           width: 190.w,
           height: 140.h,
-          gradientColors: CustomColors.lightGreenGradient,
+          gradientColors: CustomColors.greenGradient,
           onTap: () => _navigateTo(context, const AzkarListPage()),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

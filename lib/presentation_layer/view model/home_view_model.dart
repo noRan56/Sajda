@@ -30,8 +30,7 @@ class _HomeViewModelState extends State<HomeViewModel> {
   void initState() {
     super.initState();
     _loadUserLocation();
-    // _initializeClock();
-    /// الوقت
+
     clockHour = date.hour.toString();
     clockMinute = date.minute.toString();
     clockSecond = date.second.toString();
@@ -70,7 +69,6 @@ class _HomeViewModelState extends State<HomeViewModel> {
       return;
     }
 
-    // Get current location
     setState(() {
       _isLoadingLocation = true;
     });
@@ -255,7 +253,6 @@ class _HomeViewModelState extends State<HomeViewModel> {
             ),
             SizedBox(height: 30.h),
 
-            /// هنا دمجنا FutureBuilder
             FutureBuilder<PrayerTime>(
               future: _futurePrayerTime,
               builder: (context, snapshot) {
@@ -296,8 +293,6 @@ class _HomeViewModelState extends State<HomeViewModel> {
       ),
     );
   }
-
-  // ... rest of your existing code for clock and UI
 
   Widget _buildRow(String title, String time) {
     return Column(
