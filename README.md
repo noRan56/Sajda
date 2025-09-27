@@ -89,13 +89,13 @@ flutter run
 📸 Screenshots
 Qur’an Azkar Prayer Times Tasbeeh
 
-| HomePage                     | AzkarPage                      | FavPage                    | Notifications                     |
-| ---------------------------- | ------------------------------ | -------------------------- | --------------------------------- |
-| ![HomePage](assets/home.jpg) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Notifications](assets/noti.jpg) |
+| HomePage                     | AzkarPage                      | Tasbeeh                   | History                  |
+| ---------------------------- | ------------------------------ | ------------------------- | ------------------------ |
+| ![HomePage](assets/home.jpg) | ![AzkarPage](assets/azkar.png) | ![Tasbeeh](assets/45.jpg) | ![History](assets/d.jpg) |
 
 | HomePage                     | AzkarPage                      | FavPage                    | Notifications                    |
 | ---------------------------- | ------------------------------ | -------------------------- | -------------------------------- |
-| ![HomePage](assets/duaa.jpg) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.png) | ![Notifications](assets/nto.png) |
+| ![HomePage](assets/duaa.jpg) | ![AzkarPage](assets/azkar.png) | ![FavPage](assets/fav.jpg) | ![Notifications](assets/nto.png) |
 
 ## 🔮 Future Improvements
 
